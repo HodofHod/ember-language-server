@@ -79,7 +79,7 @@ function listComponents(root: string, podRoot: string): CompletionItem[] {
   if (existsSync(traditionalJsDirectory)) {
     jsPaths = walkSync(traditionalJsDirectory, {
       directories: false,
-      globs: ['**/*.js']
+      globs: ['**/*.js', '**/*.ts']
     });
   }
   if (existsSync(traditionalHbsDirectory)) {
@@ -98,8 +98,8 @@ function listComponents(root: string, podRoot: string): CompletionItem[] {
     }).map((path: string) => path.replace('/template.hbs', ''));
     podsJsPaths = walkSync(podComponentsDirectory, {
       directories: false,
-      globs: ['**/component.js']
-    }).map((path: string) => path.replace('/component.js', ''));
+      globs: ['**/component.js', '**/component.ts']
+    }).map((path: string) => path.replace(/\/component\.[tj]s$/, ''));
   }
 
   const paths = [...jsPaths, ...hbsPaths, ...podsHbsPaths, ...podsJsPaths];
@@ -119,7 +119,7 @@ function listComponents(root: string, podRoot: string): CompletionItem[] {
 function listHelpers(root: string): CompletionItem[] {
   const paths = walkSync(join(root, 'app', 'helpers'), {
     directories: false,
-    globs: ['**/*.js']
+    globs: ['**/*.js', '**/*.ts']
   });
 
   const items = paths
@@ -137,7 +137,7 @@ function listHelpers(root: string): CompletionItem[] {
 function listRoutes(root: string, podRoot: string): CompletionItem[] {
   const paths = walkSync(join(root, 'app', 'routes'), {
     directories: false,
-    globs: ['**/*.js']
+    globs: ['**/*.js', '**/*.ts']
   });
 
   let podPaths = [];
@@ -146,8 +146,8 @@ function listRoutes(root: string, podRoot: string): CompletionItem[] {
   if (existsSync(podDirectory)) {
     podPaths = walkSync(podDirectory, {
       directories: false,
-      globs: ['**/route.js']
-    }).map((path: string) => path.replace('/route.js', ''));
+      globs: ['**/route.js', '**/route.ts']
+    }).map((path: string) => path.replace(/\/route\.[tj]s$/, ''));
   }
 
   const items = [...paths, ...podPaths]

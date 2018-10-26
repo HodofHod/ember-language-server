@@ -38,13 +38,25 @@ export default class DefinitionProvider {
         const componentOrHelperName = focusPath.node.original;
 
         const podComponentPath   = path.join(project.root, 'app', project.podRoot, 'components', componentOrHelperName, 'component.js');
+        const podComponentTSPath = path.join(project.root, 'app', project.podRoot, 'components', componentOrHelperName, 'component.ts');
         const podTemplatePath    = path.join(project.root, 'app', project.podRoot, 'components', componentOrHelperName, 'template.hbs');
 
         const componentPath   = path.join(project.root, 'app', 'components', `${componentOrHelperName}.js`);
+        const componentTSPath = path.join(project.root, 'app', 'components', `${componentOrHelperName}.ts`);
         const templatePath    = path.join(project.root, 'app', 'templates', 'components', `${componentOrHelperName}.hbs`);
-        const helperPath      = path.join(project.root, 'app', 'helpers', `${componentOrHelperName}.js`);
 
-        return pathsToLocations(componentPath, templatePath, helperPath, podComponentPath, podTemplatePath);
+        const helperPath      = path.join(project.root, 'app', 'helpers', `${componentOrHelperName}.js`);
+        const helperTSPath    = path.join(project.root, 'app', 'helpers', `${componentOrHelperName}.ts`);
+
+        return pathsToLocations(
+          podComponentPath,
+          podComponentTSPath,
+          podTemplatePath,
+          componentPath,
+          componentTSPath,
+          templatePath,
+          helperPath,
+          helperTSPath);
       }
     } else if (extension === '.js') {
       let content = this.server.documents.get(uri).getText();
@@ -59,15 +71,17 @@ export default class DefinitionProvider {
       if (isModelReference(astPath)) {
         let modelName = astPath.node.value;
 
-        const modelPath = path.join(project.root, 'app', 'models', `${modelName}.js`);
+        const modelPath   = path.join(project.root, 'app', 'models', `${modelName}.js`);
+        const modelTSPath = path.join(project.root, 'app', 'models', `${modelName}.ts`);
 
-        return pathsToLocations(modelPath);
+        return pathsToLocations(modelPath, modelTSPath);
       } else if (isTransformReference(astPath)) {
         let transformName = astPath.node.value;
 
-        const transformPath = path.join(project.root, 'app', 'transforms', `${transformName}.js`);
+        const transformPath   = path.join(project.root, 'app', 'transforms', `${transformName}.js`);
+        const transformTSPath = path.join(project.root, 'app', 'transforms', `${transformName}.ts`);
 
-        return pathsToLocations(transformPath);
+        return pathsToLocations(transformPath, transformTSPath);
       }
     }
 
